@@ -23,12 +23,15 @@ namespace Mahu\SearchAlgolia\Connection;
 
 use Codappix\SearchCore\Connection\SearchRequestInterface;
 use Codappix\SearchCore\Connection\SearchResultInterface;
+use Mahu\SearchAlgolia\Connection\Algolia\Search;
+use Mahu\SearchAlgolia\Connection\Algolia\SearchResult;
 use TYPO3\CMS\Core\SingletonInterface as Singleton;
 use TYPO3\CMS\Extbase\Object\ObjectManagerInterface;
 use Codappix\SearchCore\Connection\ConnectionInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use AlgoliaSearch\AlgoliaConnectionException;
 use Codappix\SearchCore\Configuration\InvalidArgumentException;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Outer wrapper to algolia.
@@ -166,10 +169,19 @@ class Algolia implements Singleton, ConnectionInterface
      * @param SearchRequestInterface $searchRequest
      *
      * @return SearchResultInterface
+     *
+     * @throws \AlgoliaSearch\AlgoliaException
      */
     public function search(SearchRequestInterface $searchRequest) : SearchResultInterface
     {
-        // TODO: Implement search() method.
+        $this->logger->debug('Search for', [$searchRequest->getSearchTerm()]);
+
+        /** @var Search $search */
+        $search = $this->objectManager->get(Search::class, $this->connection->getClient());
+        $search->applyAllIndexes();
+        $search->setSearchRequest($searchRequest);
+
+        return $this->objectManager->get(SearchResult::class, $searchRequest, $search->search());
     }
 
     /**
