@@ -89,7 +89,7 @@ class ModuleController extends \TYPO3\CMS\Belog\Controller\AbstractController
                     $severity = \TYPO3\CMS\Core\Messaging\AbstractMessage::OK,
                     $storeInSession = TRUE
                 );
-            } catch (AlgoliaConnectionException $e) {
+            } catch (\Exception $e) {
                 $this->addFlashMessage(
                     $e->getMessage(),
                     $messageTitle = 'Algolia Exception',
