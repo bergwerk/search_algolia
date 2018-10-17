@@ -20,7 +20,7 @@ class ExtensionConfiguration implements SingletonInterface
 
     public function __construct()
     {
-        $settings = (array)unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['search_algolia']);
+        $settings = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('search_algolia');
 
         $this->setAdminApiKey($settings['adminApiKey']);
         $this->setReadOnlyApiKey($settings['readOnlyApiKey']);

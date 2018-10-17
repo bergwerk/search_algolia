@@ -8,7 +8,7 @@ call_user_func(
                 'Mahu\SearchAlgolia\Connection\Algolia'
             );
 
-        $settings = (array)unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['search_algolia']);
+        $settings = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('search_algolia');
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScriptConstants('plugin {
             tx_searchalgolia {
