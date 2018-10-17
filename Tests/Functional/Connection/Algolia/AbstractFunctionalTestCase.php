@@ -25,6 +25,8 @@ use Mahu\SearchAlgolia\Tests\Functional\AbstractFunctionalTestCase as BaseFuncti
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use Codappix\SearchCore\Configuration\ConfigurationContainerInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use Symfony\Component\Dotenv\Dotenv;
+
 
 /**
  * All functional tests should extend this base class.
@@ -61,8 +63,8 @@ abstract class AbstractFunctionalTestCase extends BaseFunctionalTestCase
 
         // Create client to make requests and assert something.
         $this->client = new \AlgoliaSearch\Client(
-            $this->configuration->get('connections.algolia.applicationID'),
-            $this->configuration->get('connections.algolia.apiKey')
+            getenv('ALGOLIA_APP_ID'),
+            getenv('ALGOLIA_API_KEY')
         );
     }
 
@@ -74,7 +76,8 @@ abstract class AbstractFunctionalTestCase extends BaseFunctionalTestCase
 
     protected function cleanUp()
     {
-        $this->client->deleteIndex($this->indexName);
+        $request = $this->client->deleteIndex($this->indexName);
+        $this->index->waitTask($request['taskID']);
     }
 
     /**
@@ -89,8 +92,12 @@ abstract class AbstractFunctionalTestCase extends BaseFunctionalTestCase
 
         if ($this->indexName) {
             $this->index = $this->client->initIndex($this->indexName);
+            $request = $this->index->clearIndex();
+            $this->index->waitTask($request['taskID']);
         } else {
             $this->index = $this->client->initIndex($documentType);
+            $request = $this->index->clearIndex();
+            $this->index->waitTask($request['taskID']);
         }
     }
 
