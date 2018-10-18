@@ -23,6 +23,7 @@ namespace Mahu\SearchAlgolia\Connection\Algolia;
 
 use Codappix\SearchCore\Configuration\ConfigurationContainerInterface;
 use TYPO3\CMS\Core\SingletonInterface as Singleton;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * The current connection to algolia.
@@ -42,10 +43,15 @@ class Connection implements Singleton
      * @var ConfigurationContainerInterface
      */
     protected $configuration;
-
+    
+    
     /**
+     * Connection constructor.
+     *
      * @param ConfigurationContainerInterface $configuration
-     * @param \AlgoliaSearch\Client $algoliaClient
+     * @param \AlgoliaSearch\Client|null      $algoliaClient
+     *
+     * @throws \Exception
      */
     public function __construct(
         ConfigurationContainerInterface $configuration,
@@ -85,7 +91,7 @@ class Connection implements Singleton
         if(getenv('ALGOLIA_APP_ID')) {
             return getenv('ALGOLIA_APP_ID');
         } else {
-            $this->configuration->get('connections.algolia.applicationID');
+            return $this->configuration->get('connections.algolia.applicationID');
         }
     }
 
@@ -93,7 +99,7 @@ class Connection implements Singleton
         if(getenv('ALGOLIA_API_KEY')) {
             return getenv('ALGOLIA_API_KEY');
         } else {
-            $this->configuration->get('connections.algolia.apiKey');
+            return $this->configuration->get('connections.algolia.apiKey');
         }
     }
 }
