@@ -1,1 +1,10 @@
-
+page {
+  search {
+    algolia {
+      # cat=search: algolia/120/100; type=string; label=Description: Application ID of your Algolia Account
+      applicationID =
+      # cat=search: algolia/120/100; type=string; label=Description: Admin API Key of your Algolia Account
+      apiKey =
+    }
+  }
+}
