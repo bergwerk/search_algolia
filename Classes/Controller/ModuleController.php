@@ -1,6 +1,7 @@
 <?php
 namespace Mahu\SearchAlgolia\Controller;
 
+use TYPO3\CMS\Belog\Domain\Model\Constraint;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use AlgoliaSearch\AlgoliaConnectionException;
 use Codappix\SearchCore\Domain\Index\IndexerFactory;
@@ -10,7 +11,7 @@ use Mahu\SearchAlgolia\Service\Log;
 /**
  * Class ModuleController for backend modules
  */
-class ModuleController extends \TYPO3\CMS\Belog\Controller\AbstractController
+class ModuleController extends \TYPO3\CMS\Belog\Controller\BackendLogController
 {
 
     /**
@@ -42,11 +43,18 @@ class ModuleController extends \TYPO3\CMS\Belog\Controller\AbstractController
         $this->configManager->injectConfigurationManager($this->configurationManager);
     }
 
+    public function initializeListAction()
+    {
+        // ...
+    }
 
     /**
      * Shows Algolia Status, a list of all remote Indexes and all indexes which are configured via Typoscript Plugin config.
+     * @param Constraint|null $constraint
+     * @param int|null $pageId
+     * @param string $layout
      */
-    public function listAction()
+    public function listAction(Constraint $constraint = null, int $pageId = null, string $layout = 'Default')
     {
         try {
             $connection = GeneralUtility::makeInstance(\Mahu\SearchAlgolia\Connection\Algolia\Connection::class, $this->configManager);
