@@ -42,10 +42,15 @@ class Connection implements Singleton
      * @var ConfigurationContainerInterface
      */
     protected $configuration;
-
+    
+    
     /**
+     * Connection constructor.
+     *
      * @param ConfigurationContainerInterface $configuration
-     * @param \AlgoliaSearch\Client $algoliaClient
+     * @param \AlgoliaSearch\Client|null      $algoliaClient
+     *
+     * @throws \Exception
      */
     public function __construct(
         ConfigurationContainerInterface $configuration,

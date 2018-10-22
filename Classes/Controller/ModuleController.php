@@ -6,12 +6,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use AlgoliaSearch\AlgoliaConnectionException;
 use Codappix\SearchCore\Domain\Index\IndexerFactory;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use Mahu\SearchAlgolia\Service\Log;
 
 /**
  * Class ModuleController for backend modules
  */
-class ModuleController extends \TYPO3\CMS\Belog\Controller\BackendLogController
+class ModuleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
     /**
@@ -61,9 +60,11 @@ class ModuleController extends \TYPO3\CMS\Belog\Controller\BackendLogController
             $this->client = $connection->getClient();
             $remoteIndexList = $this->getRemoteIndexList();
             $localIndexList = $this->getLocalIndexList();
+            
+            
 
-            $this->logService = GeneralUtility::makeInstance(Log::class);
-            $logContent = $this->logService->getLogContent();
+//            $this->logService = GeneralUtility::makeInstance(Log::class);
+//            $logContent = $this->logService->getLogContent();
         } catch (AlgoliaConnectionException $e) {
             $this->view->assignMultiple(['algoliaException' => $e->getMessage()]);
         } catch (\RuntimeException $e) {
@@ -74,7 +75,7 @@ class ModuleController extends \TYPO3\CMS\Belog\Controller\BackendLogController
             [
                 'remoteIndexList' => $remoteIndexList,
                 'localIndexList' => $localIndexList,
-                'logContent' => $logContent
+                'logContent' => [],
             ]
         );
     }
