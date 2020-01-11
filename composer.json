@@ -17,12 +17,12 @@
     "license": "GPL-2.0+",
     "repositories": [
         {
-            "type": "vcs",
-            "url": "https://github.com/martinhummer/search_algolia"
+            "type": "git",
+            "url": "https://github.com/bergwerk/search_core"
         },
         {
             "type": "git",
-            "url": "git@github.com:bergwerk/search_core.git"
+            "url": "https://github.com/bergwerk/search_algolia"
         }
     ],
     "require": {
