@@ -21,14 +21,18 @@
             "url": "https://github.com/bergwerk/search_core"
         },
         {
-            "type": "git",
-            "url": "https://github.com/bergwerk/search_algolia"
+            "type": "composer",
+            "url": "https://packagist.org"
+        },
+        {
+            "type": "composer",
+            "url": "https://composer.typo3.org/"
         }
     ],
     "require": {
         "php": ">=7.0.0",
         "typo3/cms-core": ">= 8.7.0 < 10.0.0",
-        "codappix/search_core": "dev-feature/dynamic-licenses",
+        "codappix/search_core": "dev-feature/dynamic-indices",
         "algolia/algoliasearch-client-php": "^1.23",
         "symfony/dotenv": "3.4"
     },
