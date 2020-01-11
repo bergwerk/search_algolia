@@ -23,6 +23,7 @@ namespace Mahu\SearchAlgolia\Connection\Algolia;
 
 use AlgoliaSearch\Index;
 use Codappix\SearchCore\Configuration\ConfigurationContainerInterface;
+use Codappix\SearchCore\Domain\Index\IndexerFactory;
 use TYPO3\CMS\Core\SingletonInterface as Singleton;
 
 /**
@@ -66,13 +67,13 @@ class IndexFactory implements Singleton
             $index = $connection->getClient()->initIndex($documentType);
         }
 
-        $indexConfiguration = $this->configuration->get('indexing.' . $documentType);
+        $indexConfig = $this->getIndexConfiguration($documentType);
 
-        if (isset($indexConfiguration['facetFields'])) {
+        if (isset($indexConfig['facetFields'])) {
             $index->setSettings([
                 'attributesForFaceting' => explode(
                     ',',
-                    $indexConfiguration['facetFields']
+                    $indexConfig['facetFields']
                 )
             ]);
         }
@@ -80,16 +81,43 @@ class IndexFactory implements Singleton
         return $index;
     }
 
+    protected function getIndexConfiguration($documentType)
+    {
+        foreach ($this->getLocalIndexList() as $indexType => $indexConfig) {
+            if ($indexType == $documentType) {
+                return $indexConfig;
+            }
+        }
+
+        return [];
+    }
+
     protected function getIndexNameFromConfiguration($documentType)
     {
         try {
-            $config = $this->configuration->get('indexing.' . $documentType);
+            $indexConfig = $this->getIndexConfiguration($documentType);
 
-            if (isset($config['indexName'])) {
-                return $config['indexName'];
+            if (isset($indexConfig['indexName'])) {
+                return $indexConfig['indexName'];
             }
         } catch (InvalidArgumentException $e) {
             return [];
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getLocalIndexList()
+    {
+        $list = $this->configuration->get('indexing');
+
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][IndexerFactory::class]['getLocalIndexList'])) {
+            foreach($GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS'][IndexerFactory::class]['getLocalIndexList'] as $_funcRef) {
+                \TYPO3\CMS\Core\Utility\GeneralUtility::callUserFunction($_funcRef, $list, $this);
+            }
+        }
+
+        return $list;
     }
 }

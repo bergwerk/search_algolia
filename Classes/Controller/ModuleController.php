@@ -1,6 +1,7 @@
 <?php
 namespace Mahu\SearchAlgolia\Controller;
 
+use Mahu\SearchAlgolia\Connection\Algolia\IndexFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use AlgoliaSearch\AlgoliaConnectionException;
 use Codappix\SearchCore\Domain\Index\IndexerFactory;
@@ -110,7 +111,11 @@ class ModuleController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     protected function getLocalIndexList()
     {
-        return $this->configManager->get('indexing');
+        /** @var IndexFactory $indexFactory */
+        $indexFactory = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ObjectManager::class)
+            ->get(IndexFactory::class);
+
+        return $indexFactory->getLocalIndexList();
     }
 
     /**
