@@ -41,17 +41,24 @@
                                         </tr>
                                         <thead>
                                         <tbody>
-
-                                        <f:for each="{localIndexList}" as="localIndex" key="tableName">
-
-                                            <tr>
-                                                <th>{localIndex.indexName}</th>
-                                                <th>{tableName}</th>
-                                                <th>
-                                                    <f:link.action class="btn btn-danger" action="triggerReIndexing" arguments="{'indexName': localIndex.indexName, 'tableName': tableName}">Reindex</f:link.action>
-                                                </th>
-                                            </tr>
-                                        </f:for>
+                                            <f:for each="{localIndexList}" as="localIndex" key="tableName">
+                                                <tr>
+                                                    <th>
+                                                        <f:if condition="{localIndex.title}">
+                                                            <f:then>
+                                                                {localIndex.title}
+                                                            </f:then>
+                                                            <f:else>
+                                                                {localIndex.indexName}
+                                                            </f:else>
+                                                        </f:if>
+                                                    </th>
+                                                    <th>{tableName}</th>
+                                                    <th>
+                                                        <f:link.action class="btn btn-danger" action="triggerReIndexing" arguments="{'indexName': localIndex.indexName, 'tableName': tableName}">Reindex</f:link.action>
+                                                    </th>
+                                                </tr>
+                                            </f:for>
                                         </tbody>
                                     </table>
                                 </div>
